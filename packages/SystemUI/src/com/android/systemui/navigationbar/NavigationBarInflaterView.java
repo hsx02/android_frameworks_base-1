@@ -18,18 +18,11 @@ package com.android.systemui.navigationbar;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_3BUTTON;
-import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL;
-import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL_OVERLAY;
 
 import android.annotation.Nullable;
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.om.IOverlayManager;
-import android.content.om.OverlayInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.Icon;
-import android.os.RemoteException;
-import android.os.ServiceManager;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -93,10 +86,6 @@ public class NavigationBarInflaterView extends FrameLayout
     private static final String ABSOLUTE_SUFFIX = "A";
     private static final String ABSOLUTE_VERTICAL_CENTERED_SUFFIX = "C";
 
-    private static final String OVERLAY_NAVIGATION_FULL_SCREEN = "com.cherish.overlay.immnav.gestural";
-    private static final String KEY_NAVIGATION_SPACE =
-            "system:" + Settings.System.NAVIGATION_BAR_IME_SPACE;
-
     protected LayoutInflater mLayoutInflater;
     protected LayoutInflater mLandscapeInflater;
 
@@ -116,10 +105,9 @@ public class NavigationBarInflaterView extends FrameLayout
     private OverviewProxyService mOverviewProxyService;
     private int mNavBarMode = NAV_BAR_MODE_3BUTTON;
 
-    private int mHomeHandleWidthMode = 1;
+    private int mHomeHandleWidthMode = 0;
     private boolean mNavBarLayoutInverse = false;
     private boolean mCompactLayout;
-    private boolean mIsAttachedToWindow;
 
     public NavigationBarInflaterView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -172,9 +160,6 @@ public class NavigationBarInflaterView extends FrameLayout
                 defaultResource == R.string.config_navBarLayoutQuickstep) && mCompactLayout){
             return "left;back,home,recent;right";
         }
-        if (mHomeHandleWidthMode == 0 && defaultResource == R.string.config_navBarLayoutHandle) {
-            return getContext().getString(defaultResource).replace(HOME_HANDLE, "");
-        }
         return getContext().getString(defaultResource);
     }
 
@@ -191,7 +176,6 @@ public class NavigationBarInflaterView extends FrameLayout
             if (QuickStepContract.isGesturalMode(mNavBarMode)) {
                 clearViews();
                 inflateLayout(getDefaultLayout());
-                updateNavbar(mHomeHandleWidthMode);
             }
         }
     }
@@ -199,8 +183,6 @@ public class NavigationBarInflaterView extends FrameLayout
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         Dependency.get(TunerService.class).addTunable(this, NAV_BAR_COMPACT);
-        Dependency.get(TunerService.class).addTunable(this, KEY_NAVIGATION_SPACE);
-        mIsAttachedToWindow = true;
     }
 
     @Override
@@ -231,28 +213,6 @@ public class NavigationBarInflaterView extends FrameLayout
                 mCompactLayout = compactLayout;
                 setNavigationBarLayout(getDefaultLayout());
             }
-        } else if (mIsAttachedToWindow &&
-                mNavBarMode == NAV_BAR_MODE_GESTURAL && KEY_NAVIGATION_SPACE.equals(key)) {
-            int state = TunerService.parseInteger(newValue, 0);
-            String overlay = NAV_BAR_MODE_GESTURAL_OVERLAY;
-            switch (state) {
-                case 1:  // narrow
-                    overlay += "_narrow_back";
-                    break;
-                case 2:  // hidden
-                    overlay += "_wide_back";
-            }
-
-            try {
-                int userId = ActivityManager.getCurrentUser();
-                IOverlayManager om = IOverlayManager.Stub.asInterface(
-                        ServiceManager.getService(Context.OVERLAY_SERVICE));
-                OverlayInfo info = om.getOverlayInfo(overlay, userId);
-
-                if (info != null && !info.isEnabled())
-                    om.setEnabledExclusiveInCategory(overlay, userId);
-            } catch (Exception e) {
-            }
         }
         if (QuickStepContract.isGesturalMode(mNavBarMode)) {
             setNavigationBarLayout(newValue);
@@ -261,7 +221,6 @@ public class NavigationBarInflaterView extends FrameLayout
 
     @Override
     protected void onDetachedFromWindow() {
-        mIsAttachedToWindow = false;
         Dependency.get(NavigationModeController.class).removeListener(this);
         super.onDetachedFromWindow();
     }
@@ -329,21 +288,6 @@ public class NavigationBarInflaterView extends FrameLayout
     private void updateAlternativeOrder(View v) {
         if (v instanceof ReverseLinearLayout) {
             ((ReverseLinearLayout) v).setAlternativeOrder(mAlternativeOrder);
-        }
-    }
-
-    private void updateNavbar(int mode) {
-        final IOverlayManager iom = IOverlayManager.Stub.asInterface(
-                ServiceManager.getService(Context.OVERLAY_SERVICE));
-        final boolean state = mode == 0;
-        final int userId = ActivityManager.getCurrentUser();
-        try {
-            iom.setEnabled(OVERLAY_NAVIGATION_FULL_SCREEN, state, userId);
-            if (state) {
-                iom.setHighestPriority(OVERLAY_NAVIGATION_FULL_SCREEN, userId);
-            }
-        } catch (RemoteException re) {
-            throw re.rethrowFromSystemServer();
         }
     }
 
@@ -523,17 +467,13 @@ public class NavigationBarInflaterView extends FrameLayout
         } else if (HOME_HANDLE.equals(button)) {
             v = inflater.inflate(R.layout.home_handle, parent, false);
             final ViewGroup.LayoutParams lp = v.getLayoutParams();
-            if (mHomeHandleWidthMode == 2) {
+            if (mHomeHandleWidthMode == 1) {
                 lp.width = getResources().getDimensionPixelSize(
                     R.dimen.navigation_home_handle_width_medium);
                 v.setLayoutParams(lp);
-            } else if (mHomeHandleWidthMode == 3) {
+            } else if (mHomeHandleWidthMode == 2) {
                 lp.width = getResources().getDimensionPixelSize(
                     R.dimen.navigation_home_handle_width_long);
-                v.setLayoutParams(lp);
-            } else if (mHomeHandleWidthMode == 4) {
-                lp.width = getResources().getDimensionPixelSize(
-                    R.dimen.navigation_home_handle_width_very_long);
                 v.setLayoutParams(lp);
             }
         } else if (IME_SWITCHER.equals(button)) {

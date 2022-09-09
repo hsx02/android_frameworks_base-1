@@ -5688,6 +5688,13 @@ public final class Settings {
                 "lockscreen_quick_unlock_control";
 
         /**
+         * Whether to hide navbar pill and keyboard space.
+         * Default 0.
+         * @hide
+         */
+        public static final String FULLSCREEN_GESTURES = "fullscreen_gestures";
+
+        /**
          * Whether to inverse keys in navigation bar
          * Default 0
          * @hide
@@ -6068,14 +6075,6 @@ public final class Settings {
          */
         public static final String HIGH_TOUCH_SENSITIVITY_ENABLE =
                 "high_touch_sensitivity_enable";
-				
-		/**
-         * Gesture navbar IME space.
-         * Supported modes: 0 for normal length, 1 for narrow and 2 for hidden.
-         * Default 0.
-         * @hide
-         */
-        public static final String NAVIGATION_BAR_IME_SPACE = "navigation_bar_ime_space";
 		
 		/**
          * Whether to show the kill app button in notification guts
@@ -11742,7 +11741,7 @@ public final class Settings {
 		
 		/**
          * Gesture navbar length mode.
-         * Supported modes: 0 for hidden, 1 for normal length, 2 for medium and 3 for long.
+         * Supported modes: 0 for normal length, 1 for medium and 2 for long.
          * Default 0.
          * @hide
          */
