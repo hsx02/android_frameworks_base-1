@@ -101,5 +101,7 @@ public class SystemSettings {
         Settings.System.EDGE_LIGHT_REPEAT_ANIMATION,
         Settings.System.EDGE_LIGHT_COLOR_MODE,
         Settings.System.EDGE_LIGHT_CUSTOM_COLOR,
+        Settings.System.ENABLE_RIPPLE_EFFECT,
+        Settings.System.VOLUME_KEY_CURSOR_CONTROL,
     };
 }

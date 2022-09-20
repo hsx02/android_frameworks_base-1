@@ -16,7 +16,6 @@
 
 package com.android.systemui.dagger;
 
-import com.android.keyguard.clock.ClockOptionsProvider;
 import com.android.systemui.BootCompleteCacheImpl;
 import com.android.systemui.CoreStartable;
 import com.android.systemui.Dependency;
@@ -54,8 +53,6 @@ import com.android.wm.shell.splitscreen.SplitScreen;
 import com.android.wm.shell.startingsurface.StartingSurface;
 import com.android.wm.shell.tasksurfacehelper.TaskSurfaceHelper;
 import com.android.wm.shell.transition.ShellTransitions;
-
-import com.google.android.systemui.smartspace.KeyguardSmartspaceController;
 
 import java.util.Map;
 import java.util.Optional;
@@ -261,16 +258,5 @@ public interface SysUIComponent {
     /**
      * Member injection into the supplied argument.
      */
-    void inject(ClockOptionsProvider clockOptionsProvider);
-
-    /**
-     * Member injection into the supplied argument.
-     */
     void inject(PeopleProvider peopleProvider);
-
-    /**
-     * Creates a KeyguardSmartspaceController.
-     */
-    @SysUISingleton
-    KeyguardSmartspaceController createKeyguardSmartspaceController();
 }

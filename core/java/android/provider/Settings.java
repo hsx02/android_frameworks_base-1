@@ -5631,12 +5631,6 @@ public final class Settings {
         public static final String ALERT_SLIDER_NOTIFICATIONS = "alert_slider_notifications";
 		
 		/**
-         * Whether or not volume button music controls should be enabled to seek media tracks
-         * @hide
-         */
-        public static final String VOLBTN_MUSIC_CONTROLS = "volbtn_music_controls";
-		
-		/**
          * Whether to allow one finger quick settings expansion on the side of the statusbar.
          * 0 = 0ff, 1 = right, 2 = left, 3 = both
          * @hide
@@ -5834,7 +5828,45 @@ public final class Settings {
          * Whether to show the battery info on the lockscreen while charging
          * @hide
          */
+        @Readable
         public static final String LOCKSCREEN_BATTERY_INFO = "lockscreen_battery_info";
+		
+		/**
+         * @hide
+         */
+        public static final String UDFPS_ANIM = "udfps_anim";
+
+        /**
+         * @hide
+         */
+        public static final String UDFPS_ANIM_STYLE = "udfps_anim_style";
+
+        /**
+         * @hide
+         */
+        public static final String UDFPS_ICON = "udfps_icon";
+		
+		/**
+         * FOD pressed color
+         * @hide
+         */
+        public static final String UDFPS_COLOR = "udfps_color";
+		
+		/**
+         * @hide
+         */
+        public static final String OMNI_CUSTOM_FP_ICON_ENABLED = "custom_fp_icon_enabled";
+
+        /**
+         * @hide
+         */
+        public static final String OMNI_CUSTOM_FP_ICON = "custom_fingerprint_icon";
+		
+		/**
+         * Whether to enable the ripple animation on fingerprint unlock
+         * @hide
+         */
+        public static final String ENABLE_RIPPLE_EFFECT = "enable_ripple_effect";
 
         /**
          * @hide
@@ -5943,6 +5975,12 @@ public final class Settings {
          * @hide
          */
         public static final String LOCK_POWER_MENU_DISABLED = "lockscreen_power_menu_disabled";
+		
+		/**
+         * Whether to show QS panel footer warnings like for active VPN
+         * @hide
+         */
+        public static final String QS_FOOTER_WARNINGS = "qs_footer_warnings";
 
         /**
           * Volume keys control cursor in text fields (default is 0)
@@ -6075,6 +6113,9 @@ public final class Settings {
          */
         public static final String HIGH_TOUCH_SENSITIVITY_ENABLE =
                 "high_touch_sensitivity_enable";
+		
+		/** @hide */
+        public static final String BACK_GESTURE_HEIGHT = "back_gesture_height";
 		
 		/**
          * Whether to show the kill app button in notification guts
@@ -6265,6 +6306,49 @@ public final class Settings {
         public static final String QS_HEADER_CLOCK_SIZE = "qs_header_clock_size";
 
         /**
+         * Settings Dashboard Style
+         * @hide
+         */
+        public static final String SETTINGS_DASHBOARD_STYLE = "settings_dashboard_style";
+
+        /**
+         * Settings Base Layout
+         * @hide
+         */
+        public static final String ALT_SETTINGS_LAYOUT = "alt_settings_layout";
+
+        /**
+         * Settings Homepage Layout
+         * @hide
+         */
+        public static final String USE_STOCK_LAYOUT = "use_stock_layout";
+
+        /**
+         * Settings UserCard
+         * @hide
+         */
+	public static final String DISABLE_USERCARD = "disable_usercard";
+
+        /**
+         * Force full screen for devices with cutout
+         * @hide
+         */
+        public static final String FORCE_FULLSCREEN_CUTOUT_APPS = "force_full_screen_cutout_apps";
+
+
+        /**
+         * Whether to show VoWiFi icon or not
+         * @hide
+         */
+        public static final String VOWIFI_ICON = "vowifi_icon";
+
+        /**
+         * VoWiFi icon style
+         * @hide
+         */
+        public static final String VOWIFI_ICON_STYLE = "vowifi_icon_style";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
@@ -6407,6 +6491,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(HIGH_TOUCH_POLLING_RATE_ENABLE);
             PRIVATE_SETTINGS.add(HIGH_TOUCH_SENSITIVITY_ENABLE);
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_CHIP);
+            PRIVATE_SETTINGS.add(FORCE_FULLSCREEN_CUTOUT_APPS);
         }
 
         /**
@@ -19082,6 +19167,30 @@ public final class Settings {
         @SdkConstant(SdkConstant.SdkConstantType.ACTIVITY_INTENT_ACTION)
         public static final String ACTION_VOLUME =
                 "android.settings.panel.action.VOLUME";
+
+        /**
+         * Activity Action: Show a settings dialog containing controls for Mobile Data.
+         * <p>
+         * Input: Nothing.
+         * <p>
+         * Output: Nothing.
+         * @hide
+         */
+        @SdkConstant(SdkConstant.SdkConstantType.ACTIVITY_INTENT_ACTION)
+        public static final String ACTION_MOBILE_DATA =
+                "android.settings.panel.action.MOBILE_DATA";
+
+        /**
+         * Activity Action: Show a settings dialog containing controls for Bluetooth.
+         * <p>
+         * Input: Nothing.
+         * <p>
+         * Output: Nothing.
+         * @hide
+         */
+        @SdkConstant(SdkConstant.SdkConstantType.ACTIVITY_INTENT_ACTION)
+        public static final String ACTION_BLUETOOTH =
+                "android.settings.panel.action.BLUETOOTH";
 
         /**
          * @hide
